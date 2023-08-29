@@ -18,3 +18,4 @@ export const getOne = async(gameId) => {
 
     return result;
 };
+
