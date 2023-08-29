@@ -14,12 +14,11 @@ games,
 
         <div id="home-page">
             <h1>Latest Games</h1>
+            <div id="latest-games">
             {games.map(x => <LatestGames key={x._id} game={x}/>)}
-            {/* <!-- Display div: with information about every game (if any) --> */}
 
-            
-            {/* <!-- Display paragraph: If there is no games  --> */}
-            <p className="no-articles">No games yet</p>
+            {!games && <p className="no-articles">No games yet</p>}
+            </div>
         </div>
     </section>
     )

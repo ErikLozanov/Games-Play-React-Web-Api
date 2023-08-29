@@ -82,6 +82,7 @@
     border-radius: 15px;
     float: left;
     height: auto;
+    width: 400px;
     color: rgb(204, 144, 131);
 }
 
@@ -171,4 +172,9 @@
     font-weight: 700;
     font-size: 60px;
     font-family: "Agency FB";
+}
+
+#latest-games {
+    display: flex;
+
 }
