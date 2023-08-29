@@ -2,88 +2,103 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import * as gameService from "../../services/gameService";
-import * as commentService from '../../services/commentService';
-
 
 export const GameDetails = () => {
-    const [username, setUsername] = useState('');
-    const [comment, setComment] = useState('');
-    const [comments, setComments] = useState([]);
+    const [username, setUsername] = useState("");
+    const [comment, setComment] = useState("");
     const { gameId } = useParams();
-    const [game,setGame] = useState({});
-
+    const [game, setGame] = useState({});
 
     useEffect(() => {
-        gameService.getOne(gameId)
-        .then(res => {
+        gameService.getOne(gameId).then((res) => {
+            console.log(res);
             setGame(res);
-            return commentService.getAll(gameId);
-        })
-        .then(result => {
-            setComments(result);
         });
     }, [gameId]);
 
-
     const onCommentSubmit = async (e) => {
         e.preventDefault();
-       await commentService.create({
-            gameId,
+        const result = await gameService.addComment(gameId, {
             username,
             comment,
-        })
+        });
 
-        setUsername('');
-        setComment('');
+        setGame((state) => ({
+            ...state,
+            comments: { ...state.comments, [result._id]: result },
+        }));
+        setUsername("");
+        setComment("");
     };
 
     return (
         <section id="game-details">
-        <h1>Game Details</h1>
-        <div className="info-section">
+            <h1>Game Details</h1>
+            <div className="info-section">
+                <div className="game-header">
+                    <img className="game-img" src={game.imageUrl} />
+                    <h1>{game.title}</h1>
+                    <span className="levels">MaxLevel: {game.maxLevel}</span>
+                    <p className="type">{game.category}</p>
+                </div>
 
-            <div className="game-header">
-                <img className="game-img" src={game.imageUrl} />
-                <h1>{game.title}</h1>
-                <span className="levels">MaxLevel: {game.maxLevel}</span>
-                <p className="type">{game.category}</p>
+                <p className="text">{game.summary}</p>
+
+                {/* <!-- Bonus ( for Guests and Users ) --> */}
+                <div className="details-comments">
+                    <h2>Comments:</h2>
+                    <ul>
+                        {game.comments &&
+                            Object.values(game.comments).map((x) => (
+                                <li key={x._id} className="comment">
+                                    <p>
+                                        {x.username}: {x.comment}
+                                    </p>
+                                </li>
+                            ))}
+                    </ul>
+
+                    {!game.comments && (
+                        <p className="no-comment">No comments.</p>
+                    )}
+                </div>
+
+                {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
+                <div className="buttons">
+                    <a href="#" className="button">
+                        Edit
+                    </a>
+                    <a href="#" className="button">
+                        Delete
+                    </a>
+                </div>
             </div>
 
-            <p className="text">{game.summary}</p>
-
-            {/* <!-- Bonus ( for Guests and Users ) --> */}
-            <div className="details-comments">
-                <h2>Comments:</h2>
-                <ul>
-                    { comments.length === 0 ? 
-                    <p className="no-comment">No comments.</p>
-                    :
-                    comments.map(x => (
-                    <li key={x._id} className="comment">
-                    <p>{x.username}: {x.comment}</p>
-                    </li>
-                    ))}
-                </ul>
-            </div>
-
-            {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
-            <div className="buttons">
-                <a href="#" className="button">Edit</a>
-                <a href="#" className="button">Delete</a>
-            </div>
-        </div>
-
-        {/* <!-- Bonus --> */}
-        {/* <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) --> */}
-        <article className="create-comment">
-            <label>Add new comment:</label>
-            <form className="form" onSubmit={onCommentSubmit}>
-                <input type="text" name="username" placeholder="Pesho" value={username} onChange={(e) => setUsername(e.target.value)}/>
-                <textarea name="comment" placeholder="Comment......" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
-                <input className="btn submit" type="submit" value="Add Comment"/>
-            </form>
-        </article>
-
-    </section>
+            {/* <!-- Bonus --> */}
+            {/* <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) --> */}
+            <article className="create-comment">
+                <label>Add new comment:</label>
+                <form className="form" onSubmit={onCommentSubmit}>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Pesho"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <textarea
+                        name="comment"
+                        placeholder="Comment......"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    ></textarea>
+                    <input
+                        className="btn submit"
+                        type="submit"
+                        value="Add Comment"
+                    />
+                </form>
+            </article>
+        </section>
     );
-}
+};
