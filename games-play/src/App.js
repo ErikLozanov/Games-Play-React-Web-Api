@@ -14,7 +14,7 @@ import { GameDetails } from './components/GameDetails/GameDetails';
 function App() {
   const navigate = useNavigate();
   const [games,setGames] = useState([]);
-
+  console.log(games);
   useEffect(() => {
       gameService.getAll()
       .then(result => {
