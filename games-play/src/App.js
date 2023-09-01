@@ -1,6 +1,8 @@
 import {Routes, Route, useNavigate} from 'react-router-dom';
 
 import * as gameService from "./services/gameService";
+import { AuthContext } from './contexts/AuthContext';
+import * as authService from "./services/authService";
 
 import { Header } from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer"
@@ -11,10 +13,13 @@ import { Register } from "./components/Register/Register";
 import { CreateGame } from "./components/CreateGame/CreateGame";
 import { Catalog } from "./components/Catalog/Catalog";
 import { GameDetails } from './components/GameDetails/GameDetails';
+
+
 function App() {
   const navigate = useNavigate();
   const [games,setGames] = useState([]);
-  console.log(games);
+  const [auth,setAuth] = useState({});
+
   useEffect(() => {
       gameService.getAll()
       .then(result => {
@@ -30,7 +35,32 @@ function App() {
     navigate('/catalog');
   }
 
+  const onLoginSubmit = async (data) => {
+    try {
+
+    const result = await authService.login(data);
+
+    setAuth(result);
+
+    navigate('/');
+  }
+  catch (error) {
+    alert(error.message);
+  }
+};
+
+  const context = {
+    onLoginSubmit,
+    userId: auth._id,
+    token: auth.accesstoken,
+    userEmail: auth.email,
+    isAuthenticated: !!auth.accessToken,
+    
+  }
+
   return (
+    <AuthContext.Provider value={context}>
+
       <div id="box">
 
         <Header />;
@@ -46,7 +76,7 @@ function App() {
           </main>
         <Footer />
       </div>
-
+      </AuthContext.Provider>
   );
 }
 
