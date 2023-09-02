@@ -1,14 +1,16 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import * as gameService from "../../services/gameService";
+import { gameServiceFactory } from "../../services/gameService";
+import { useService } from "../../hooks/useService";
 
 export const GameDetails = () => {
     const [username, setUsername] = useState("");
     const [comment, setComment] = useState("");
     const { gameId } = useParams();
     const [game, setGame] = useState({});
-
+    const gameService =  useService(gameServiceFactory);
+    
     useEffect(() => {
         gameService.getOne(gameId).then((res) => {
             console.log(res);
