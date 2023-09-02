@@ -48,6 +48,20 @@ function App() {
     alert(error.message);
   }
 };
+  const onRegisterSubmit = async (values) => {
+    const {confirmPassword, ...registerData} = values;
+    try {
+
+    const result = await authService.register(values);
+
+    setAuth(result);
+
+    navigate('/');
+  }
+  catch (error) {
+    alert(error.message);
+  }
+};
 
   const context = {
     onLoginSubmit,
@@ -55,6 +69,7 @@ function App() {
     token: auth.accesstoken,
     userEmail: auth.email,
     isAuthenticated: !!auth.accessToken,
+    onRegisterSubmit,
     
   }
 
