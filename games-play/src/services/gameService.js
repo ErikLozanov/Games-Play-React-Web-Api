@@ -1,5 +1,5 @@
 import { requestFactory } from "./requester";
-const baseUrl = 'http://localhost:3030/jsonstore/games';
+const baseUrl = 'http://localhost:3030/data/games';
 
 
 
@@ -28,11 +28,17 @@ export const gameServiceFactory = (token) => {
     
         return result;
     }
+    const edit = (gameId, data) => request.put(`${baseUrl}/${gameId}`, data);
+
+    const deleteGame = (gameId) => request.delete(`${baseUrl}/${gameId}`);
+
 
     return {
         getAll,
         getOne,
         create,
+        edit,
         addComment,
+        delete: deleteGame,
     };
 }

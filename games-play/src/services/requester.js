@@ -1,4 +1,10 @@
+import { useContext } from "react";
+
+import { AuthContext } from "../contexts/AuthContext";
+
 const request = async (method, token, url, data) => {
+
+
     const options = {};
 
     if (method !== "GET") {

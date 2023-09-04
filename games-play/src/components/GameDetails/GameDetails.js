@@ -1,16 +1,18 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-
+import { useParams, Link } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { gameServiceFactory } from "../../services/gameService";
 import { useService } from "../../hooks/useService";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export const GameDetails = () => {
+    const {userId} = useContext(AuthContext);
     const [username, setUsername] = useState("");
     const [comment, setComment] = useState("");
     const { gameId } = useParams();
     const [game, setGame] = useState({});
     const gameService =  useService(gameServiceFactory);
-    
+    const navigate = useNavigate();
     useEffect(() => {
         gameService.getOne(gameId).then((res) => {
             console.log(res);
@@ -33,6 +35,13 @@ export const GameDetails = () => {
         setComment("");
     };
 
+    const onDeleteClick = async () => {
+
+//TODO: DELETE FROM STATE
+        await gameService.delete(game._id);
+       navigate('/catalog');
+    }
+ 
     return (
         <section id="game-details">
             <h1>Game Details</h1>
@@ -66,14 +75,17 @@ export const GameDetails = () => {
                 </div>
 
                 {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
+                {game._ownerId === userId && (
                 <div className="buttons">
-                    <a href="#" className="button">
-                        Edit
-                    </a>
-                    <a href="#" className="button">
-                        Delete
-                    </a>
-                </div>
+                <Link to={`/catalog/${gameId}/edit`} className="button">
+                    Edit
+                </Link>
+                <button onClick={onDeleteClick} className="button">
+                    Delete
+                </button>
+            </div>
+                )}
+
             </div>
 
             {/* <!-- Bonus --> */}

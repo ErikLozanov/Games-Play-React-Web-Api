@@ -15,6 +15,7 @@ import { CreateGame } from "./components/CreateGame/CreateGame";
 import { Catalog } from "./components/Catalog/Catalog";
 import { GameDetails } from './components/GameDetails/GameDetails';
 import { Logout } from './components/Logout/Logout';
+import { EditGame } from './components/EditGame/EditGame';
 
 
 function App() {
@@ -43,8 +44,10 @@ function App() {
     try {
 
     const result = await authService.login(data);
+    console.log(result);
 
     setAuth(result);
+
 
     navigate('/');
   }
@@ -80,16 +83,23 @@ function App() {
     setAuth({});
   };
 
+  const onGameEditSubmit = async(values) => {
+    const result = await gameService.edit(values._id, values);
+    //TODO: CHANGE IN STATE!!!
+    setGames(state => state.map(x => x._id === values._id ? result : x));
+
+    navigate(`/catalog/${values._id}`);
+  }
+
   const context = {
     onCreateGameSubmit,
     onLogout,
     onLoginSubmit,
     userId: auth._id,
-    token: auth.accesstoken,
+    token: auth.accessToken,
     userEmail: auth.email,
     isAuthenticated: !!auth.accessToken,
     onRegisterSubmit,
-    
   }
 
   return (
@@ -107,6 +117,7 @@ function App() {
             <Route path='/create-game' element={<CreateGame onCreateGameSubmit={onCreateGameSubmit} />} />
             <Route path='/catalog' element={<Catalog games={games}/>} />
             <Route path='/catalog/:gameId' element={<GameDetails />} />
+            <Route path='/catalog/:gameId/edit' element={<EditGame onGameEditSubmit={onGameEditSubmit}/>} />
           </Routes>
           </main>
         <Footer />
