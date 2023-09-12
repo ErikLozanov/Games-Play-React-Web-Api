@@ -1,5 +1,5 @@
 export const Footer = () => {
     return (
-        <p>All rights reserved &copy;</p>
-    )
-}
+        <div>All rights reserved &copy;</div>
+    );
+};

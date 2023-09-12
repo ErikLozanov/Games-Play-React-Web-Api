@@ -1,34 +1,36 @@
-import { useParams } from "react-router-dom";
-import { useForm } from "../../hooks/useForm";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+import { useForm } from "../../hooks/useForm";
 import { useService } from "../../hooks/useService";
 import { gameServiceFactory } from "../../services/gameService";
 
-export const EditGame = ({ onGameEditSubmit }) => {
-
+export const EditGame = ({
+    onGameEditSubmit,
+}) => {
     const { gameId } = useParams();
     const gameService = useService(gameServiceFactory);
-    const {values, changeHandler, onSubmit, changeValues} = useForm(
-        {
-            _id: "",
-            title: "",
-            category: "",
-            maxLevel: "",
-            imageUrl: "",
-            summary: "",
-        },
-        onGameEditSubmit);
+    const { values, changeHandler, onSubmit, changeValues } = useForm({
+        _id: '',
+        title: '',
+        category: '',
+        maxLevel: '',
+        imageUrl: '',
+        summary: '',
+    }, onGameEditSubmit);
 
-        useEffect(()=> {
-            gameService.getOne(gameId)
+    useEffect(() => {
+        gameService.getOne(gameId)
             .then(result => {
                 changeValues(result);
-            })
-        },[]);
+            });
+    }, [gameId]);
+
     return (
         <section id="edit-page" className="auth">
             <form id="edit" method="post" onSubmit={onSubmit}>
                 <div className="container">
+
                     <h1>Edit Game</h1>
                     <label htmlFor="leg-title">Legendary title:</label>
                     <input
@@ -69,11 +71,8 @@ export const EditGame = ({ onGameEditSubmit }) => {
 
                     <label htmlFor="summary">Summary:</label>
                     <textarea name="summary" id="summary" value={values.summary} onChange={changeHandler}></textarea>
-                    <input
-                        className="btn submit"
-                        type="submit"
-                        defaultValue="Edit Game"
-                    />
+                    <input className="btn submit" type="submit" value="Edit Game" />
+
                 </div>
             </form>
         </section>
