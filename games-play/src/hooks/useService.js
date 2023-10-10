@@ -5,6 +5,6 @@ export const useService = (serviceFactory) => {
     const { token } = useContext(AuthContext)
 
     const service = serviceFactory(token);
-g
+
     return service;
 };

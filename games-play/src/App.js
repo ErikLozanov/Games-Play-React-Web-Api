@@ -25,6 +25,7 @@ function App() {
     useEffect(() => {
         gameService.getAll()
             .then(result => {
+                console.log(result);
                 setGames(result)
             })
     }, []);
@@ -54,7 +55,7 @@ function App() {
 
                 <main id="main-content">
                     <Routes>
-                        <Route path='/' element={<Home />} />
+                        <Route path='/' element={<Home games={games}/>} />
                         <Route path='/login' element={<Login />} />
                         <Route path='/logout' element={<Logout />} />
                         <Route path='/register' element={<Register />} />
