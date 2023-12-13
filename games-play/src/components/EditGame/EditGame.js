@@ -47,6 +47,7 @@ export const EditGame = ({
                         type="text"
                         id="category"
                         name="category"
+                        placeholder="Category..."
                         value={values.category}
                         onChange={changeHandler}
                     />
