@@ -38,6 +38,7 @@ export const EditGame = ({
                         id="title"
                         name="title"
                         value={values.title}
+                        placeholder="Title"
                         onChange={changeHandler}
                     />
 
