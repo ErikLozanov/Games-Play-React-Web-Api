@@ -58,6 +58,7 @@ export const EditGame = ({
                         id="maxLevel"
                         name="maxLevel"
                         min="1"
+                        required
                         value={values.maxLevel}
                         onChange={changeHandler}
                     />
