@@ -15,12 +15,12 @@ import { CreateGame } from "./components/CreateGame/CreateGame";
 import { Catalog } from "./components/Catalog/Catalog";
 import { GameDetails } from './components/GameDetails/GameDetails';
 import { EditGame } from './components/EditGame/EditGame';
-// import { withAuth } from './hoc/withAuth';
+
 
 function App() {
     const navigate = useNavigate();
     const [games, setGames] = useState([]);
-    const gameService = gameServiceFactory(); //auth.accessToken
+    const gameService = gameServiceFactory(); 
 
     useEffect(() => {
         gameService.getAll()
